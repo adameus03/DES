@@ -14,6 +14,7 @@ uchar test_initial_perm();
 
 uchar test_final_perm();
 
+uchar test_e_selection();
 
 
 

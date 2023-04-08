@@ -34,8 +34,8 @@ void printb(uchar* data, size_t bitlen){
         }
     }
 }
-void print_blk(uchar* d){
-    for(uchar i=0x0; i<0x8; i++){
+void print_blk(uchar* d, uchar n_bytes){
+    for(uchar i=0x0; i<n_bytes; i++){
         printb(d+i, 8);
         std::cout << std::endl;
     }
@@ -83,7 +83,6 @@ uchar test_final_perm(){
     uchar * p = new uchar[8];
     final_perm(d, p);
     delete[] d;
-    print_blk(p);
 
     uchar retval =    *p  == 0b10110111 &&
                    *(p+1) == 0b01111011 &&
@@ -94,5 +93,36 @@ uchar test_final_perm(){
                    *(p+6) == 0b11110111 &&
                    *(p+7) == 0b01101011 ;
     delete[] p;
+    return retval;
+}
+/*
+    32  1  2  3  4  5  4  5                 1  2  3  4  5  6  7  8
+     6  7  8  9  8  9 10 11                 9 10 11 12 13 14 15 16
+    12 13 12 13 14 15 16 17                17 18 19 20 21 22 23 24
+    16 17 18 19 20 21 20 21                25 26 27 28 29 30 31 32
+    22 23 24 25 24 25 26 27
+    28 29 28 29 30 31 32 1
+*/
+//oid e_selection(uchar* blk, uchar* s)
+uchar test_e_selection(){
+    uchar* d = new uchar[4];
+    *d     =  0b11011110;
+    *(d+1) =  0b01111011;
+    *(d+2) =  0b01111101;
+    *(d+3) =  0b11011111;
+
+    uchar* s = new uchar[6];
+    print_blk(d, 0x4);
+    std::cout << "-----------" << std::endl;
+    e_selection(d, s);
+    delete[] d;
+    print_blk(s, 0x6);
+    uchar retval =    *s  == 0b11101111 &&
+                   *(s+1) == 0b11000011 &&
+                   *(s+2) == 0b11110110 &&
+                   *(s+3) == 0b10111111 &&
+                   *(s+4) == 0b10111110 &&
+                   *(s+5) == 0b11111111 ;
+    delete[] s;
     return retval;
 }
