@@ -18,6 +18,7 @@ uchar test_e_selection();
 
 uchar test_sbox_combined();
 
+uchar test_p_permutation();
 
 
 #endif // TESTS_H_INCLUDED

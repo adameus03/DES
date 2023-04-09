@@ -15,5 +15,7 @@ void e_selection(uchar* blk, uchar* s);
 
 void sbox_combined(uchar* u, uchar* v);
 
+void p_permutation(uchar* d, uchar* p);
+
 
 #endif // CRYPTO_H_INCLUDED

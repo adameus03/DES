@@ -150,3 +150,30 @@ uchar test_sbox_combined(){
     return retval;
 
 }
+
+//void p_permutation(uchar* d, uchar* p)
+
+/*
+    16  7 20 21 29 12 28 17           1  2  3  4  5  6  7  8
+     1 15 23 26  5 18 31 10           9 10 11 12 13 14 15 16
+     2  8 24 14 32 27  3  9          17 18 19 20 21 22 23 24
+    19 13 30  6 22 11  4 25          25 26 27 28 29 30 31 32
+*/
+
+uchar test_p_permutation(){
+    uchar* d = new uchar[4];
+    *d     =  0b11011110;
+    *(d+1) =  0b01111011;
+    *(d+2) =  0b01111101;
+    *(d+3) =  0b11011111;
+    uchar* p = new uchar[4];
+    p_permutation(d, p);
+    delete[] d;
+    print_blk(p, 4);
+    uchar retval =    *p  == 0b11111110 &&
+                   *(p+1) == 0b11011111 &&
+                   *(p+2) == 0b10101000 &&
+                   *(p+3) == 0b11111111 ;
+    delete[] p;
+    return retval;
+}
