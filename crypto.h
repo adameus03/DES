@@ -19,4 +19,6 @@ void p_permutation(uchar* d, uchar* p);
 
 void permuted_choice_1(uchar* k, uchar* cd);
 
+void permuted_choice_2(uchar* cd, uchar* k);
+
 #endif // CRYPTO_H_INCLUDED

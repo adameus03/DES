@@ -22,5 +22,7 @@ uchar test_p_permutation();
 
 uchar test_permuted_choice_1();
 
+uchar test_permuted_choice_2();
+
 
 #endif // TESTS_H_INCLUDED
