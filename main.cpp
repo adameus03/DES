@@ -13,6 +13,7 @@ int main()
     checker(test_initial_perm(), "initial_perm");
     checker(test_final_perm(), "final_perm");
     checker(test_e_selection(), "e_selection");
+    checker(test_sbox_combined(), "sbox_combined");
 
     return 0;
 }

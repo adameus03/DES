@@ -112,11 +112,8 @@ uchar test_e_selection(){
     *(d+3) =  0b11011111;
 
     uchar* s = new uchar[6];
-    print_blk(d, 0x4);
-    std::cout << "-----------" << std::endl;
     e_selection(d, s);
     delete[] d;
-    print_blk(s, 0x6);
     uchar retval =    *s  == 0b11101111 &&
                    *(s+1) == 0b11000011 &&
                    *(s+2) == 0b11110110 &&
@@ -125,4 +122,31 @@ uchar test_e_selection(){
                    *(s+5) == 0b11111111 ;
     delete[] s;
     return retval;
+}
+
+//void sbox_combined(uchar* u, uchar* v)
+uchar test_sbox_combined(){
+    uchar* u = new uchar[6];
+       *u  = 0b11101111;  // 111011
+    *(u+1) = 0b11000011;  // 111100
+    *(u+2) = 0b11110110;  // 001111
+    *(u+3) = 0b10111111;  // 110110
+    *(u+4) = 0b10111110;  // 101111
+    *(u+5) = 0b11111111;  // 111011
+                          // 111011
+                          // 111111
+
+    uchar* v = new uchar[4];
+
+    sbox_combined(u, v);
+    delete[] u;
+
+    uchar retval =    *v  == 0b11100000 &&
+                   *(v+1) == 0b10001101 &&
+                   *(v+2) == 0b11100111 &&
+                   *(v+3) == 0b11111011 ;
+
+    delete[] v;
+    return retval;
+
 }

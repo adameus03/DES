@@ -16,6 +16,8 @@ uchar test_final_perm();
 
 uchar test_e_selection();
 
+uchar test_sbox_combined();
+
 
 
 #endif // TESTS_H_INCLUDED
