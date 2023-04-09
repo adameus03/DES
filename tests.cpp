@@ -169,11 +169,55 @@ uchar test_p_permutation(){
     uchar* p = new uchar[4];
     p_permutation(d, p);
     delete[] d;
-    print_blk(p, 4);
+    //print_blk(p, 4);
     uchar retval =    *p  == 0b11111110 &&
                    *(p+1) == 0b11011111 &&
                    *(p+2) == 0b10101000 &&
                    *(p+3) == 0b11111111 ;
     delete[] p;
+    return retval;
+}
+
+//void permuted_choice_1(uchar* k, uchar* cd)
+/*
+        [C]
+    57 49 41 33 25 17  9  1                   01 02 03 04 05 06 07 08
+    58 50 42 34 26 18 10  2                   09 10 11 12 13 14 15 16
+    59 51 43 35 27 19 11  3                   17 18 19 20 21 22 23 24
+    60 52 44 36                               25 26 27 28 29 30 31 32
+                                              33 34 35 36 37 38 39 40
+                                              41 42 43 44 45 46 47 48
+                                              49 50 51 52 53 54 55 56
+                                              57 58 59 60 61 62 63 64
+    [D]
+                63 55 47 39
+    31 23 15  7 62 54 46 38
+    30 22 14  6 61 53 45 37
+    29 21 13  5 28 20 12  4
+*/
+uchar test_permuted_choice_1(){
+    uchar* k = new uchar[8];
+    *k     =  0b11011110;
+    *(k+1) =  0b01111011;
+    *(k+2) =  0b01111101;
+    *(k+3) =  0b11011111;
+    *(k+4) =  0b01111101;
+    *(k+5) =  0b11100111;
+    *(k+6) =  0b10111110;
+    *(k+7) =  0b11111111;
+    uchar* cd = new uchar[7];
+    print_blk(k, 8);
+    std::cout << "---------------------" << std::endl;
+    permuted_choice_1(k, cd);
+    delete[] k;
+    print_blk(cd, 7);
+    uchar retval =    *cd  == 0b11101001 &&
+                   *(cd+1) == 0b10111111 &&
+                   *(cd+2) == 0b11110110 &&
+                   *(cd+3) == 0b11011110 &&
+                   *(cd+4) == 0b10111111 &&
+                   *(cd+5) == 0b11011101 &&
+                   *(cd+6) == 0b11111111 ;
+    delete[] cd;
     return retval;
 }

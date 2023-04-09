@@ -20,5 +20,7 @@ uchar test_sbox_combined();
 
 uchar test_p_permutation();
 
+uchar test_permuted_choice_1();
+
 
 #endif // TESTS_H_INCLUDED

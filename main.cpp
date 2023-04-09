@@ -15,6 +15,7 @@ int main()
     checker(test_e_selection(), "e_selection");
     checker(test_sbox_combined(), "sbox_combined");
     checker(test_p_permutation(), "p_permutation");
+    checker(test_permuted_choice_1(), "permuted_choice_1");
 
     return 0;
 }
