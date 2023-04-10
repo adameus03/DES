@@ -1,6 +1,15 @@
 #include <cstring>
 #include "crypto.h"
 
+/*!
+    @brief Funkcja Feistela struktury Feistela - ozn. f(R, K)
+    @param r
+        Wskaznik do  32-bitowego argumentu R funkcji f(R, K)    [patrz dokumentacja DES]
+    @param k
+        Wskaznik do 48-bitowego argumentu K funkcji f(R, K)     [patrz dokumentacja DES]
+    @param f
+        Wskaznik do miejsca w pamieci, gdzie bedzie zapisany wynik, czyli f(R, K)    [patrz dokumentacja DES]
+*/
 void feistel_f(uchar* r, uchar* k, uchar* f){
     uchar* s = new uchar[6];
     e_selection(r, s);
@@ -10,6 +19,15 @@ void feistel_f(uchar* r, uchar* k, uchar* f){
     delete[] s; // move outside the func for optimization?
 }
 
+/*!
+
+    @param blk
+        Wskaznik do  64-bitowego bloku wejsciowego
+    @param k
+        Wskaznik do 64-bitowego klucza glownego dla algorytmu DES
+    @param e
+        Wskaznik do miejsca w pamieci, gdzie bedzie zapisany 64-bitowy wynik szyfrowania bloku wejsciowego
+*/
 void encrypt(uchar* blk, uchar* k, uchar* e){
     uchar* lr = new uchar[8];
     initial_perm(blk, lr);
