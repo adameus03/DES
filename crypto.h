@@ -19,7 +19,7 @@ void permuted_choice_1(uchar* k, uchar* cd); // [tested]
 
 void permuted_choice_2(uchar* cd, uchar* k); // [tested]
 
-void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_length);
+void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_length); // [tested]
 
 void lshift_blk7(uchar* cd, uchar* r); // [tested]
 
