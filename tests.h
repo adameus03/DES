@@ -24,5 +24,7 @@ uchar test_permuted_choice_1();
 
 uchar test_permuted_choice_2();
 
+void visual_test_feistel_f();
+
 
 #endif // TESTS_H_INCLUDED

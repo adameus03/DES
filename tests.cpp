@@ -264,3 +264,23 @@ uchar test_permuted_choice_2(){
     return retval;
 }
 
+//void feistel_f(uchar* r, uchar* k, uchar* f)
+void visual_test_feistel_f(){
+    uchar* r = new uchar[4];
+    *r     =  0b11011110;
+    *(r+1) =  0b01111011;
+    *(r+2) =  0b01111101;
+    *(r+3) =  0b11011111;
+    uchar* k = new uchar[6];
+    *k     =  0b11011111;
+    *(k+1) =  0b01111010;
+    *(k+2) =  0b01111100;
+    *(k+3) =  0b11011111;
+    *(k+4) =  0b01111100;
+    *(k+5) =  0b11011111;
+    feistel_f(r, k, r);
+    delete[] k;
+    printb(r, 32);
+    delete[] r;
+}
+

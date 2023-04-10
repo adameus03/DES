@@ -391,3 +391,17 @@ void permuted_choice_2(uchar* cd, uchar* k){
     *(k+5) = ((*(cd+4)<<0x1)&0x80) | ((*(cd+6)<<0x3)&0x40) | ((*(cd+5)<<0x3)&0x20) | ((*(cd+5)>>0x2)&0x10) | ((*(cd+6)>>0x3)&0x8) | ((*(cd+4)>>0x2)&0x4) | ((*(cd+3)>>0x2)&0x2) | (*(cd+3)&0x1);
 
 }
+
+void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_len){
+    for(uchar i=0x0; i<blk_len; i++){
+        *(r+i) = *(a+i) ^ *(b+i);
+    }
+}
+
+void feistel_f(uchar* r, uchar* k, uchar* f){
+    uchar* s = new uchar[6];
+    e_selection(r, s);
+    xor_blks(s, k, s, 0x6);
+    sbox_combined(s, s);
+    p_permutation(s, f);
+}

@@ -18,6 +18,8 @@ int main()
     checker(test_permuted_choice_1(), "permuted_choice_1");
     checker(test_permuted_choice_2(), "permuted_choice_2");
 
+    visual_test_feistel_f();
+
     return 0;
 }
 
