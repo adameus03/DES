@@ -2,28 +2,6 @@ typedef unsigned char uchar;
 typedef unsigned int uint;
 typedef unsigned long long ull;
 
-#include <iostream> //do usuniêcia po debugowaniu
-
-/* Ta funkcja mo¿e siê okazaæ w ogóle nie potrzebna :) */
-/*uchar** divide_to_chunks(uchar* data, size_t bitlen, int& n){
-    static uchar** chunks = new uchar*;
-    size_t blk_count = bitlen/64;
-    if(bitlen % 64 != 0) blk_count++;
-    for(size_t i=0; i<blk_count; i++){
-        chunks[i] = data + (i<<3);
-    }
-    return chunks;
-}*/
-void printu(unsigned long long& u){
-    for(char c=0x0; c<0x40; c++){
-        if((0x8000000000000000>>c)&u){
-            std::cout << '1';
-        }
-        else std::cout << '0';
-    }
-    std::cout << std::endl;
-}
-
 
 void initial_perm(uchar* blk, uchar* p){ // perm
     for(uchar s=0x0; s<0x8; s++){ //byte shift - offset prevar
@@ -398,10 +376,41 @@ void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_len){
     }
 }
 
-void feistel_f(uchar* r, uchar* k, uchar* f){
-    uchar* s = new uchar[6];
-    e_selection(r, s);
-    xor_blks(s, k, s, 0x6);
-    sbox_combined(s, s);
-    p_permutation(s, f);
+void lshift_blk7(uchar* cd, uchar* r){
+    ull u = ((ull)(*cd)<<0x30) |((ull)(*(cd+1))<<0x28) | ((ull)(*(cd+2))<<0x20) | ((ull)(*(cd+3))<<0x18) | ((ull)(*(cd+4))<<0x10) | ((ull)(*(cd+5))<<0x8) | (ull)(*(cd+6));
+    // 00000000 cccccccc cccccccc cccccccc ccccdddd dddddddd dddddddd dddddddd    u
+    // 0000000c cccccccc cccccccc cccccccc cccddddd dddddddd dddddddd ddddddd0    u<<0x1
+    // 00000000 cccccccc cccccccc cccccccc ccc0dddd dddddddd dddddddd ddddddd0    (u<<0x1) & 0x00ffffffeffffffe
+
+    u = ((u<<0x1)&0x00ffffffeffffffe) | ((u>>0x1b)&0x10000001);
+
+    *r = u >> 0x30;
+    *(r+1) = (u >> 0x28) & 0xff;
+    *(r+2) = (u >> 0x20) & 0xff;
+    *(r+3) = (u >> 0x18) & 0xff;
+    *(r+4) = (u >> 0x10) & 0xff;
+    *(r+5) = (u >> 0x8) & 0xff;
+    *(r+6) = u & 0xff;
 }
+
+/*void printu(unsigned long long& u){
+    for(char c=0x0; c<0x40; c++){
+        if((0x8000000000000000>>c)&u){
+            std::cout << '1';
+        }
+        else std::cout << '0';
+    }
+    std::cout << std::endl;
+}*/
+
+/* Ta funkcja mo¿e siê okazaæ w ogóle nie potrzebna :) */
+/*uchar** divide_to_chunks(uchar* data, size_t bitlen, int& n){
+    static uchar** chunks = new uchar*;
+    size_t blk_count = bitlen/64;
+    if(bitlen % 64 != 0) blk_count++;
+    for(size_t i=0; i<blk_count; i++){
+        chunks[i] = data + (i<<3);
+    }
+    return chunks;
+}*/
+

@@ -2,6 +2,7 @@ typedef unsigned char uchar;
 
 #include <iostream>
 #include "crypto.h"
+#include "des.h"
 
 /*uchar test_divide_to_chunks(uchar* data, size_t bitlen, int& n){
 
@@ -206,11 +207,8 @@ uchar test_permuted_choice_1(){
     *(k+6) =  0b10111110;
     *(k+7) =  0b11111111;
     uchar* cd = new uchar[7];
-    print_blk(k, 8);
-    std::cout << "---------------------" << std::endl;
     permuted_choice_1(k, cd);
     delete[] k;
-    print_blk(cd, 7);
     uchar retval =    *cd  == 0b11101001 &&
                    *(cd+1) == 0b10111111 &&
                    *(cd+2) == 0b11110110 &&
@@ -261,6 +259,29 @@ uchar test_permuted_choice_2(){
                    *(k+4) == 0b10010100 &&
                    *(k+5) == 0b11110111 ;
     delete[] k;
+    return retval;
+}
+
+//void lshift(uchar* cd, uchar* r)
+uchar test_lshift_blk7(){
+    uchar* cd = new uchar[7];
+    *cd     =  0b11011110;
+    *(cd+1) =  0b01111011;
+    *(cd+2) =  0b01111101;
+    *(cd+3) =  0b11011111;
+    *(cd+4) =  0b01111101;
+    *(cd+5) =  0b11100111;
+    *(cd+6) =  0b10111110;
+    lshift_blk7(cd, cd);
+    //print_blk(cd, 7);
+    uchar retval =    *cd  == 0b10111100 &&
+                   *(cd+1) == 0b11110110 &&
+                   *(cd+2) == 0b11111011 &&
+                   *(cd+3) == 0b10111110 &&
+                   *(cd+4) == 0b11111011 &&
+                   *(cd+5) == 0b11001111 &&
+                   *(cd+6) == 0b01111101 ;
+    delete[] cd;
     return retval;
 }
 

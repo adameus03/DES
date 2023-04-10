@@ -1,8 +1,6 @@
 #ifndef CRYPTO_H_INCLUDED
 #define CRYPTO_H_INCLUDED
 
-#include <iostream> //do usuniêcia po debugowaniu
-
 typedef unsigned char uchar;
 
 //uchar** divide_to_chunks(uchar* data, size_t bitlen, int& n);
@@ -23,6 +21,6 @@ void permuted_choice_2(uchar* cd, uchar* k); // [tested]
 
 void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_length);
 
-void feistel_f(uchar* r, uchar* k, uchar* f);
+void lshift_blk7(uchar* cd, uchar* r);
 
 #endif // CRYPTO_H_INCLUDED

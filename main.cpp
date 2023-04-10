@@ -17,6 +17,7 @@ int main()
     checker(test_p_permutation(), "p_permutation");
     checker(test_permuted_choice_1(), "permuted_choice_1");
     checker(test_permuted_choice_2(), "permuted_choice_2");
+    checker(test_lshift_blk7(), "lshift_blk7");
 
     visual_test_feistel_f();
 

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "crypto.h"
+#include "des.h"
 
 typedef unsigned char uchar;
 
@@ -23,6 +24,8 @@ uchar test_p_permutation();
 uchar test_permuted_choice_1();
 
 uchar test_permuted_choice_2();
+
+uchar test_lshift_blk7();
 
 void visual_test_feistel_f();
 
