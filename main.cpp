@@ -20,7 +20,7 @@ int main()
     checker(test_xor_blks(), "xor_blks");
     checker(test_lshift_blk7(), "lshift_blk7");
 
-    visual_test_feistel_f();
+    //visual_test_feistel_f();
     visual_test_encrypt();
 
     return 0;

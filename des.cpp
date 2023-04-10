@@ -7,16 +7,8 @@ void feistel_f(uchar* r, uchar* k, uchar* f){
     xor_blks(s, k, s, 0x6);
     sbox_combined(s, s);
     p_permutation(s, f);
+    delete[] s; // move outside the func for optimization?
 }
-
-/*
-    lshift_blk7(cd, cd);
-    permuted_choice_2(cd, _k);
-    feistel_f(r, _k, f);
-    xor_blks(l, f, x, 0x4);
-    memcpy(l, r, 4);
-    memcpy(r, x, 4);
-*/
 
 void encrypt(uchar* blk, uchar* k, uchar* e){
     uchar* lr = new uchar[8];

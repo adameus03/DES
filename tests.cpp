@@ -337,6 +337,7 @@ void visual_test_feistel_f(){
 //void encrypt(uchar* blk, uchar* k, uchar* e)
 void visual_test_encrypt(){
     uchar* blk = new uchar[8];
+
     *blk     =  0b11011110;
     *(blk+1) =  0b01111011;
     *(blk+2) =  0b01111101;
@@ -345,6 +346,18 @@ void visual_test_encrypt(){
     *(blk+5) =  0b11100111;
     *(blk+6) =  0b10111110;
     *(blk+7) =  0b00001111;
+
+    /*
+    *blk     = 0b01100000;
+    *(blk+1) = 0b00111000;
+    *(blk+2) = 0b11101111;
+    *(blk+3) = 0b11111101;
+    *(blk+4) = 0b10100010;
+    *(blk+5) = 0b01111100;
+    *(blk+6) = 0b01011111;
+    *(blk+7) = 0b01101110;
+    */
+
     uchar* k = new uchar[8];
     *k     =  0b11011111;
     *(k+1) =  0b01111010;
@@ -360,14 +373,9 @@ void visual_test_encrypt(){
     std::cout << "--K-------------" << std::endl;
     print_blk(k, 0x8);
     encrypt(blk, k, e);
+    delete[] blk;
+    delete[] k;
     std::cout << "--E-------------" << std::endl;
     print_blk(e, 0x8);
-    std::cout << "================" << std::endl;
-    std::cout << "--BLK-----------" << std::endl;
-    print_blk(e, 0x8);
-    std::cout << "--K-------------" << std::endl;
-    print_blk(k, 0x8);
-    encrypt(e, k, blk);
-    std::cout << "--E-------------" << std::endl;
-    print_blk(blk, 0x8);
+    delete[] e;
 }
