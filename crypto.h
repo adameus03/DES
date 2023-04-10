@@ -21,6 +21,6 @@ void permuted_choice_2(uchar* cd, uchar* k); // [tested]
 
 void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_length);
 
-void lshift_blk7(uchar* cd, uchar* r);
+void lshift_blk7(uchar* cd, uchar* r); // [tested]
 
 #endif // CRYPTO_H_INCLUDED

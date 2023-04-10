@@ -262,6 +262,34 @@ uchar test_permuted_choice_2(){
     return retval;
 }
 
+//void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_len)
+uchar test_xor_blks(){
+    uchar* a = new uchar[4];
+    uchar* b = new uchar[4];
+
+    *a     =  0b11011110;
+    *(a+1) =  0b01111011;
+    *(a+2) =  0b01111101;
+    *(a+3) =  0b11011111;
+
+    *b     =  0b01111101;
+    *(b+1) =  0b11100111;
+    *(b+2) =  0b10111110;
+    *(b+3) =  0b11111111;
+
+    uchar* r = new uchar[4];
+    xor_blks(a, b, r, 0x4);
+    delete[] a;
+    delete[] b;
+    uchar retval =    *r  == 0b10100011 &&
+                   *(r+1) == 0b10011100 &&
+                   *(r+2) == 0b11000011 &&
+                   *(r+3) == 0b00100000 ;
+    delete[] r;
+    return retval;
+}
+
+
 //void lshift(uchar* cd, uchar* r)
 uchar test_lshift_blk7(){
     uchar* cd = new uchar[7];
@@ -302,6 +330,44 @@ void visual_test_feistel_f(){
     feistel_f(r, k, r);
     delete[] k;
     printb(r, 32);
+    std::cout << std::endl;
     delete[] r;
 }
 
+//void encrypt(uchar* blk, uchar* k, uchar* e)
+void visual_test_encrypt(){
+    uchar* blk = new uchar[8];
+    *blk     =  0b11011110;
+    *(blk+1) =  0b01111011;
+    *(blk+2) =  0b01111101;
+    *(blk+3) =  0b11011111;
+    *(blk+4) =  0b01111101;
+    *(blk+5) =  0b11100111;
+    *(blk+6) =  0b10111110;
+    *(blk+7) =  0b00001111;
+    uchar* k = new uchar[8];
+    *k     =  0b11011111;
+    *(k+1) =  0b01111010;
+    *(k+2) =  0b01111100;
+    *(k+3) =  0b11011111;
+    *(k+4) =  0b01111100;
+    *(k+5) =  0b11100110;
+    *(k+6) =  0b10111111;
+    *(k+7) =  0b00001110;
+    uchar* e = new uchar[8];
+    std::cout << "--BLK-----------" << std::endl;
+    print_blk(blk, 0x8);
+    std::cout << "--K-------------" << std::endl;
+    print_blk(k, 0x8);
+    encrypt(blk, k, e);
+    std::cout << "--E-------------" << std::endl;
+    print_blk(e, 0x8);
+    std::cout << "================" << std::endl;
+    std::cout << "--BLK-----------" << std::endl;
+    print_blk(e, 0x8);
+    std::cout << "--K-------------" << std::endl;
+    print_blk(k, 0x8);
+    encrypt(e, k, blk);
+    std::cout << "--E-------------" << std::endl;
+    print_blk(blk, 0x8);
+}

@@ -25,9 +25,13 @@ uchar test_permuted_choice_1();
 
 uchar test_permuted_choice_2();
 
+uchar test_xor_blks();
+
 uchar test_lshift_blk7();
 
 void visual_test_feistel_f();
+
+void visual_test_encrypt();
 
 
 #endif // TESTS_H_INCLUDED
