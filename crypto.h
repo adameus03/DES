@@ -1,7 +1,7 @@
 #ifndef CRYPTO_H_INCLUDED
 #define CRYPTO_H_INCLUDED
 
-#include <iostream>; //do usuniêcia po debugowaniu
+#include <iostream> //do usuniêcia po debugowaniu
 
 typedef unsigned char uchar;
 

@@ -2,7 +2,7 @@ typedef unsigned char uchar;
 typedef unsigned int uint;
 typedef unsigned long long ull;
 
-#include <iostream>; //do usuniêcia po debugowaniu
+#include <iostream> //do usuniêcia po debugowaniu
 
 /* Ta funkcja mo¿e siê okazaæ w ogóle nie potrzebna :) */
 /*uchar** divide_to_chunks(uchar* data, size_t bitlen, int& n){
