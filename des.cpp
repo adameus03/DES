@@ -34,37 +34,20 @@ void feistel_f(uchar* r, uchar* k, uchar* f){
 void encrypt_blk(uchar* blk, uchar* sk, uchar* e){
     uchar* lr = new uchar[8];
     initial_perm(blk, lr);
-    uchar* l = lr;
-    uchar* r = lr+4;
+    uchar* l = lr; // L = L0
+    uchar* r = lr+4; // R = R0
     uchar* f = new uchar[4];
     uchar* x = new uchar[4];
     uchar* sk_head = sk;
-    for(uchar i=0x0; i<0x2; i++){
+
+    for(uchar i=0x0; i<0xf; i++){
         feistel_f(r, sk_head, f);
         xor_blks(l, f, x, 0x4);
         memcpy(l, r, 4);
         memcpy(r, x, 4);
         sk_head += 6;
     }
-    for(uchar i=0x0; i<0x6; i++){
-        feistel_f(r, sk_head, f);
-        xor_blks(l, f, x, 0x4);
-        memcpy(l, r, 4);
-        memcpy(r, x, 4);
-        sk_head += 6;
-    }
-    feistel_f(r, sk_head, f);
-    xor_blks(l, f, x, 0x4);
-    memcpy(l, r, 4);
-    memcpy(r, x, 4);
-    sk_head += 6;
-    for(uchar i=0x0; i<0x6; i++){
-        feistel_f(r, sk_head, f);
-        xor_blks(l, f, x, 0x4);
-        memcpy(l, r, 4);
-        memcpy(r, x, 4);
-        sk_head += 6;
-    }
+
     feistel_f(r, sk_head, f);
     xor_blks(l, f, x, 0x4);
     memcpy(l, x, 4);
@@ -92,33 +75,16 @@ void decrypt_blk(uchar* blk, uchar* sk, uchar* d){
     uchar* r = lr+4;
     uchar* f = new uchar[4];
     uchar* x = new uchar[4];
-    uchar* sk_head = sk + 95;
-    for(uchar i=0x0; i<0x2; i++){
+    uchar* sk_head = sk;
+
+    for(uchar i=0x0; i<0xf; i++){
         feistel_f(r, sk_head, f);
         xor_blks(l, f, x, 0x4);
         memcpy(l, r, 4);
         memcpy(r, x, 4);
         sk_head -= 6;
     }
-    for(uchar i=0x0; i<0x6; i++){
-        feistel_f(r, sk_head, f);
-        xor_blks(l, f, x, 0x4);
-        memcpy(l, r, 4);
-        memcpy(r, x, 4);
-        sk_head -= 6;
-    }
-    feistel_f(r, sk_head, f);
-    xor_blks(l, f, x, 0x4);
-    memcpy(l, r, 4);
-    memcpy(r, x, 4);
-    sk_head -= 6;
-    for(uchar i=0x0; i<0x6; i++){
-        feistel_f(r, sk_head, f);
-        xor_blks(l, f, x, 0x4);
-        memcpy(l, r, 4);
-        memcpy(r, x, 4);
-        sk_head -= 6;
-    }
+
     feistel_f(r, sk_head, f);
     xor_blks(l, f, x, 0x4);
     memcpy(l, x, 4);
