@@ -740,7 +740,7 @@ uchar test_feistel_f(){
 }
 
 //void encrypt(uchar* blk, uchar* k, uchar* e)
-void visual_test_encrypt(){
+/*void visual_test_encrypt(){
     uchar* blk = new uchar[8];
 
     *blk     =  0b11011110;
@@ -750,7 +750,7 @@ void visual_test_encrypt(){
     *(blk+4) =  0b01111101;
     *(blk+5) =  0b11100111;
     *(blk+6) =  0b10111110;
-    *(blk+7) =  0b00001111;
+    *(blk+7) =  0b00001111;*/
 
     /*
     *blk     = 0b01100000;
@@ -763,7 +763,7 @@ void visual_test_encrypt(){
     *(blk+7) = 0b01101110;*/
 
 
-    uchar* k = new uchar[8];
+    /*uchar* k = new uchar[8];
     *k     =  0b11011111;
     *(k+1) =  0b01111010;
     *(k+2) =  0b01111100;
@@ -783,4 +783,43 @@ void visual_test_encrypt(){
     std::cout << "--E-------------" << std::endl;
     print_blk(e, 0x8);
     delete[] e;
+}*/
+
+//void encrypt_blk(uchar* blk, uchar* sk, uchar* e)
+//void decrypt_blk(uchar* blk, uchar* sk, uchar* d)
+//void get_subkeys(uchar* k, uchar* sk)
+
+uchar test_encrypt_decrypt_blk(){
+    uchar* k = new uchar[8];
+    *k     =  0b11011111;
+    *(k+1) =  0b01111010;
+    *(k+2) =  0b01111100;
+    *(k+3) =  0b11011111;
+    *(k+4) =  0b01111100;
+    *(k+5) =  0b11100110;
+    *(k+6) =  0b10111111;
+    *(k+7) =  0b00001110;
+    uchar* sk = new uchar[96];
+    get_subkeys(k, sk);
+    uchar* plain_blk = (uchar*)"abecadlo";
+    uchar* enciphered_blk = new uchar[8];
+    encrypt_blk((uchar*)plain_blk, sk, enciphered_blk);
+    uchar* deciphered_enciphered_blk = new uchar[8];
+    decrypt_blk(enciphered_blk, sk, deciphered_enciphered_blk);
+    delete[] sk;
+    delete[] k;
+    uchar retval = 0x1;
+    print_blk(plain_blk, 0x8);
+    std::cout << "++++++++++++++++++++++++" << std::endl;
+    print_blk(enciphered_blk, 0x8);
+    std::cout << "++++++++++++++++++++++++" << std::endl;
+    delete[] enciphered_blk;
+    print_blk(deciphered_enciphered_blk, 0x8);
+    for(uchar i=0x0; i<0x8; i++){
+        if(*(plain_blk+i) != *(deciphered_enciphered_blk+i)){
+            retval = 0x0;
+        }
+    }
+    delete[] deciphered_enciphered_blk;
+    return retval;
 }

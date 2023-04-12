@@ -33,7 +33,9 @@ void visual_test_feistel_f();
 
 uchar test_feistel_f();
 
-void visual_test_encrypt();
+//void visual_test_encrypt();
+
+uchar test_encrypt_decrypt_blk();
 
 
 #endif // TESTS_H_INCLUDED

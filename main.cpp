@@ -21,9 +21,10 @@ int main()
     checker(test_lshift_blk7(), "lshift_blk7");
 
     checker(test_feistel_f(), "feistel_f");
+    checker(test_encrypt_decrypt_blk(), "encrypt_blk, decrypt_blk, get_subkeys");
 
     //visual_test_feistel_f();
-    visual_test_encrypt();
+    //visual_test_encrypt();
 
     return 0;
 }
