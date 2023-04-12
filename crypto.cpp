@@ -353,7 +353,7 @@ void p_permutation(uchar* d, uchar* p){
     @brief
         Funkcja wyboru permutowanego - Permuted choice 1 (PC-1)
     @param k
-        Wskaznik na 64-bitowy bufer zawierajacy klucz glowny algorytmu DES
+        Wskaznik na 64-bitowy bufor zawierajacy klucz glowny algorytmu DES
     @param cd
         Wskaznik na 56-bitowy blok wyjsciowy,
         ktorego obszar pamieci zostal zaalokowany przed wywolaniem tej funkcji
@@ -432,6 +432,15 @@ void permuted_choice_1(uchar* k, uchar* cd){
     51 45 33 48 44 49 39 56                       33 34 35 36 37 38 39 40
     34 53 46 42 50 36 29 32                       41 42 43 44 45 46 47 48
                                                   49 50 51 52 53 54 55 56
+*/
+
+/*!
+    @brief
+        Funkcja wyboru permutowanego - Permuted choice 2 (PC-2)
+    @param cd
+        Wskaznik na 56-bitowy bufor zawierajacy 28-bitowy blok C oraz 28-bitowy blok D
+    @param k
+        Wskaznik na 48-bitowy bufor wyjsciowy. Alokacja obszaru pamieci tego bufora powinna nastapic przed wywolaniem PC-2
 */
 void permuted_choice_2(uchar* cd, uchar* k){
     *k = ((*(cd+1)<<0x5)&0x80) | ((*(cd+2)>>0x1)&0x40) | (*(cd+1)&0x20) | ((*(cd+2)<<0x4)&0x10) | ((*cd>>0x4)&0x8) | ((*cd>>0x1)&0x4) | ((*cd>>0x4)&0x2) | ((*(cd+3)>>0x4)&0x1);
