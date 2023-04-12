@@ -469,7 +469,15 @@ void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_len){
         *(r+i) = *(a+i) ^ *(b+i);
     }
 }
-
+/*!
+    @brief
+        Funkcja dedykowana do jednoczesnej rotacji dwoch polowek 7-bajtowego bloku
+        o jeden bit w lewo w obszarach 28-bitowych nalezacych do wspomnianych polowek
+    @param cd
+        Wskaznik na 7-bajtowy blok wejsciowy
+    @param
+        Wskaznik na 7-bajtowy blok wyjsciowy, ktorego obszar pamieci zostal zaalokowany wczesniej
+*/
 void lshift_blk7(uchar* cd, uchar* r){
     ull u = ((ull)(*cd)<<0x30) |((ull)(*(cd+1))<<0x28) | ((ull)(*(cd+2))<<0x20) | ((ull)(*(cd+3))<<0x18) | ((ull)(*(cd+4))<<0x10) | ((ull)(*(cd+5))<<0x8) | (ull)(*(cd+6));
     // 00000000 cccccccc cccccccc cccccccc ccccdddd dddddddd dddddddd dddddddd    u

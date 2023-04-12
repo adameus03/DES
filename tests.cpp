@@ -639,6 +639,7 @@ uchar test_xor_blks(){
 
 //void lshift(uchar* cd, uchar* r)
 uchar test_lshift_blk7(){
+    /* Test 1 */
     uchar* cd = new uchar[7];
     *cd     =  0b11011110;
     *(cd+1) =  0b01111011;
@@ -649,14 +650,38 @@ uchar test_lshift_blk7(){
     *(cd+6) =  0b10111110;
     lshift_blk7(cd, cd);
     //print_blk(cd, 7);
-    uchar retval =    *cd  == 0b10111100 &&
-                   *(cd+1) == 0b11110110 &&
-                   *(cd+2) == 0b11111011 &&
-                   *(cd+3) == 0b10111110 &&
-                   *(cd+4) == 0b11111011 &&
-                   *(cd+5) == 0b11001111 &&
-                   *(cd+6) == 0b01111101 ;
+    uchar retval = 0x1;
+    if(!(*cd  == 0b10111100 &&
+      *(cd+1) == 0b11110110 &&
+      *(cd+2) == 0b11111011 &&
+      *(cd+3) == 0b10111110 &&
+      *(cd+4) == 0b11111011 &&
+      *(cd+5) == 0b11001111 &&
+      *(cd+6) == 0b01111101)) retval = 0x0;
     delete[] cd;
+
+    /* Test 2 */
+
+    cd = new uchar[7];
+    *cd     =  0b00101010;
+    *(cd+1) =  0b11101011;
+    *(cd+2) =  0b10101011;
+    *(cd+3) =  0b00010011;
+    *(cd+4) =  0b10101000;
+    *(cd+5) =  0b11111100;
+    *(cd+6) =  0b00101110;
+
+    lshift_blk7(cd, cd);
+
+    if(!(*cd  == 0b01010101 &&
+      *(cd+1) == 0b11010111 &&
+      *(cd+2) == 0b01010110 &&
+      *(cd+3) == 0b00100111 &&
+      *(cd+4) == 0b01010001 &&
+      *(cd+5) == 0b11111000 &&
+      *(cd+6) == 0b01011100)) retval = 0x0;
+    delete[] cd;
+
     return retval;
 }
 
