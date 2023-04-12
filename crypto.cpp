@@ -348,6 +348,16 @@ void p_permutation(uchar* d, uchar* p){
     30 22 14  6 61 53 45 37
     29 21 13  5 28 20 12  4
 */
+
+/*!
+    @brief
+        Funkcja wyboru permutowanego - Permuted choice 1 (PC-1)
+    @param k
+        Wskaznik na 64-bitowy bufer zawierajacy klucz glowny algorytmu DES
+    @param cd
+        Wskaznik na 56-bitowy blok wyjsciowy,
+        ktorego obszar pamieci zostal zaalokowany przed wywolaniem tej funkcji
+*/
 void permuted_choice_1(uchar* k, uchar* cd){
     for(uchar i=0x0; i<0x3; i++){
         *(cd+i) = 0x0;
@@ -359,6 +369,24 @@ void permuted_choice_1(uchar* k, uchar* cd){
         }
     }
 
+    /*
+              [C]
+        57 49 41 33 25 17  9  1                   01 02 03 04 05 06 07 08
+        58 50 42 34 26 18 10  2                   09 10 11 12 13 14 15 16
+        59 51 43 35 27 19 11  3                   17 18 19 20 21 22 23 24
+        60 52 44 36                               25 26 27 28 29 30 31 32
+                                                  33 34 35 36 37 38 39 40
+                                                  41 42 43 44 45 46 47 48
+                                                  49 50 51 52 53 54 55 56
+                                                  57 58 59 60 61 62 63 64
+        [D]
+                    63 55 47 39
+        31 23 15  7 62 54 46 38
+        30 22 14  6 61 53 45 37
+        29 21 13  5 28 20 12  4
+    */
+
+
     *(cd+3) = 0x0;
     for(uchar i=0x0; i<0x4; i++){
         *(cd+3) |= (*(k+7-i)<<(0x3-i)) & (0x80>>i);
@@ -367,7 +395,7 @@ void permuted_choice_1(uchar* k, uchar* cd){
     for(uchar i=0x0; i<0x3; i++){
         *(cd+3) |= (*(k+7-i)<<(0x2-i)) & (0x8>>i);
     }
-    *(cd+3) |= (*(k+4)>>0x1) & 0x40;
+    *(cd+3) |= (*(k+4)>>0x1) & 0x1; // mam cie!
 
     for(uchar i=0x0; i<0x3; i++){
         *(cd+4+i) = 0x0;
