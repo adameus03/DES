@@ -162,7 +162,7 @@ uchar test_e_selection(){
         28 29 28 29 30 31 32 1
     */
 
-    d = new uchar[4];
+    d = new uchar[4]; // aka input R to the Feistel function
     *d     = 0b00011111;
     *(d+1) = 0b11011100;
     *(d+2) = 0b01010001;
@@ -275,13 +275,13 @@ uchar test_p_permutation(){
         19 13 30  6 22 11  4 25          25 26 27 28 29 30 31 32
     */
 
-    d = new uchar[4];
+    d = new uchar[4]; // aka output of sbox_combined
     *d     = 0b10000010;
     *(d+1) = 0b11001101;
     *(d+2) = 0b00110110;
     *(d+3) = 0b11110001;
 
-    p = new uchar[4];
+    p = new uchar[4]; // aka final output of Feistel function
     p_permutation(d, p);
     delete[] d;
     if(!(*p  == 0b11100010 &&
@@ -485,7 +485,38 @@ void visual_test_feistel_f(){
     delete[] r;
 }
 
-//uchar test_feistel_f(uchar)
+uchar test_feistel_f(){
+    uchar* r = new uchar[4];
+    uchar* k = new uchar[6];
+
+    *r     = 0b00011111;
+    *(r+1) = 0b11011100;
+    *(r+2) = 0b01010001;
+    *(r+3) = 0b11100001;
+
+    *k     = 0b11110001;
+    *(k+1) = 0b00011100;
+    *(k+2) = 0b01111001;
+    *(k+3) = 0b00000001;
+    *(k+4) = 0b11111000;
+    *(k+5) = 0b01010010;
+
+    uchar* f = new uchar[4];
+
+    feistel_f(r, k, f);
+    delete[] r;
+    delete[] k;
+
+    uchar retval = 0x1;
+    if(!(*f == 0b11100010 &&
+     *(f+1) == 0b10110001 &&
+     *(f+2) == 0b00011101 &&
+     *(f+3) == 0b11001001)) retval = 0x0;
+
+    delete[] f;
+
+    return retval;
+}
 
 //void encrypt(uchar* blk, uchar* k, uchar* e)
 void visual_test_encrypt(){

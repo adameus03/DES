@@ -31,6 +31,8 @@ uchar test_lshift_blk7();
 
 void visual_test_feistel_f();
 
+uchar test_feistel_f();
+
 void visual_test_encrypt();
 
 
