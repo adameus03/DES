@@ -21,7 +21,6 @@ void feistel_f(uchar* r, uchar* k, uchar* f){
 }
 
 /*!
-
     @param blk
         Wskaznik do  64-bitowego bloku wejsciowego
     @param k
@@ -36,11 +35,9 @@ void encrypt(uchar* blk, uchar* k, uchar* e){
     uchar* r = lr+4;
     uchar* cd = new uchar[7];
     permuted_choice_1(k, cd);
-
     uchar* _k = new uchar[6];
     uchar* f = new uchar[4];
     uchar* x = new uchar[4];
-
     for(uchar i=0x0; i<0x2; i++){
         lshift_blk7(cd, cd);
         permuted_choice_2(cd, _k);
@@ -76,7 +73,6 @@ void encrypt(uchar* blk, uchar* k, uchar* e){
     feistel_f(r, _k, f);
     xor_blks(l, f, x, 0x4);
     memcpy(l, x, 4);
-
     final_perm(lr, e);
 }
 
