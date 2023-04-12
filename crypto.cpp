@@ -3,6 +3,15 @@ typedef unsigned int uint;
 typedef unsigned long long ull;
 
 
+/*!
+    @brief
+        Funkcja wykonujaca permutacje poczatkowa (IP) przed wlasciwa czescia algorytmu DES
+    @param blk
+        Wskaznik do 64-bitowego bloku danych
+    @param p
+        Wskaznik do zaalokowanego obszaru pamieci, w ktorym w wyniku dzialania funkcji
+        znajdzie sie 64-bitowy wynik perutacji poczatkowej wejsciowego bloku danych
+*/
 void initial_perm(uchar* blk, uchar* p){ // perm
     for(uchar s=0x0; s<0x8; s++){ //byte shift - offset prevar
         uchar o = (s%0x4) << 1u; //offset
@@ -25,6 +34,17 @@ void initial_perm(uchar* blk, uchar* p){ // perm
     }
 }
 
+/*!
+    @brief
+        Funkcja wykonujaca permutacje koncowa bedaca odwrotnoscia permutacji poczatkowej ({IP}^{-1})
+        wykonywana po zakonczeniu wlasciwej czesci algorytmu DES dla danego bloku
+    @param blk
+        Wskaznik do bloku 64-bitowego
+    @param p
+        Wskaznik do zaalokowanego obszaru pamieci, w ktorym w wyniku dzialania funkcji
+        znajdzie sie 64-bitowy wynik perutacji koncowej bloku preoutput
+
+*/
 void final_perm(uchar* blk, uchar* p){
     for(uchar s=0x0; s<0x8; s++){
         *(p+s) = 0xff;
@@ -52,6 +72,17 @@ void final_perm(uchar* blk, uchar* p){
     16 17 18 19 20 21 20 21                25 26 27 28 29 30 31 32
     22 23 24 25 24 25 26 27
     28 29 28 29 30 31 32 1
+*/
+
+/*!
+    @brief
+        Funkcja selekcji E
+    @param blk
+        Wskaznik do 32-bitowego bloku wejsciowego
+    @param s
+        Wskaznik do zaalokowanego obszaru pamieci, w ktorym w wyniku dzialania funkcji
+        znajdzie sie 48-bitowy wynik selekcji E
+
 */
 void e_selection(uchar* blk, uchar* s){
     *s = *(blk+3) << 0x7;
@@ -102,9 +133,14 @@ void e_selection(uchar* blk, uchar* s){
     *(s+5) |= *blk >> 0x7;
 }
 
-/*
-    u : 8*6 = 48b = 6B
-    v : 8*4 = 32b = 4B
+
+/*!
+    @brief
+        Funkcja obliczajaca zbiorowo wartosci S-boxow
+    @param _u
+        Wskaznik do bufora o rozmiarze 8*6b = 48b = 6B
+    @param _v
+        Wskaznik do bufora o rozmiarze 8*4b = 32b = 4B
 */
 void sbox_combined(uchar* _u, uchar* _v){
     /*
@@ -266,6 +302,15 @@ void sbox_combined(uchar* _u, uchar* _v){
      2  8 24 14 32 27  3  9          17 18 19 20 21 22 23 24
     19 13 30  6 22 11  4 25          25 26 27 28 29 30 31 32
 */
+/*!
+    @brief
+        Funkcja permutacji P
+        (wykonywana jako ostatnia operacja skladowa funkcji Feistela dla algorytmu DES)
+    @param d
+        Wskaznik do 32-bitowego bloku wejsciowego
+    @param p
+        Wskaznik do 32-bitowego bloku wyjsciowego, o wczesniej zaalokowanym obszarze pamieci
+*/
 void p_permutation(uchar* d, uchar* p){
     *p = (*(d+1)<<0x7) | ((*d<<0x5)&0x40) | ((*(d+2)<<0x1)&0x20) | ((*(d+2)<<0x1)&0x10) | (*(d+3)&0x8) | ((*(d+1)>>0x2)&0x4) | ((*(d+3)>>0x3)&0x2) | (*(d+2)>>0x7);
     *(p+1) = (*d&0x80) | ((*(d+1)<<0x5)&0x40) | ((*(d+2)<<0x4)&0x20) | ((*(d+3)>>0x2)&0x10) | (*d&0x8) | ((*(d+2)>>0x4)&0x4) | (*(d+3)&0x2) | ((*(d+1)>>0x6)&0x1);
@@ -370,6 +415,18 @@ void permuted_choice_2(uchar* cd, uchar* k){
 
 }
 
+/*!
+    @brief
+        Funkcja do wykonywania operacji XOR miedzy bitami dwoch buforow
+    @param a
+        Wskaznik do pierwszego bufora
+    @param b
+        Wskaznik do drugiego bufora
+    @param r
+        Wskaznik do bufora wynikowego
+    @param blk_len
+        Rozmiar kazdego z buforow (w bajtach)
+*/
 void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_len){
     for(uchar i=0x0; i<blk_len; i++){
         *(r+i) = *(a+i) ^ *(b+i);

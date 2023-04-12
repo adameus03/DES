@@ -2,7 +2,8 @@
 #include "crypto.h"
 
 /*!
-    @brief Funkcja Feistela struktury Feistela - ozn. f(R, K)
+    @brief
+        Funkcja Feistela struktury Feistela - ozn. f(R, K)
     @param r
         Wskaznik do  32-bitowego argumentu R funkcji f(R, K)    [patrz dokumentacja DES]
     @param k

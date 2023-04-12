@@ -7,11 +7,26 @@ typedef unsigned char uchar;
 /*uchar test_divide_to_chunks(uchar* data, size_t bitlen, int& n){
 
 }*/
-
+/*!
+    @brief
+        Funkcja do wyswietlania wynikow testu
+    @param ok
+        Wynik testu: 0x1 - pozytywny / 0x0 - negatywny
+    @param description
+        Nazwa testowanej funkcjonalnosci
+*/
 void checker(const uchar& ok, const char* description){
     std::cout << '[' << (ok?"OK":"!!") << "]  " << description << std::endl;
 }
 
+/*!
+    @brief
+        Funkcja do wyswietlania w jednej linijce bitow we wszystkich bajtach bufora
+    @param data
+        Wskaznik do bufora danych
+    @param bitlen
+        Rozmiar danych w buforze (w bitach)
+*/
 void printb(uchar* data, size_t bitlen){
     size_t len = bitlen / 8;
     uchar blm = (uchar)(bitlen%8); //bitlen mod
@@ -35,6 +50,15 @@ void printb(uchar* data, size_t bitlen){
         }
     }
 }
+
+/*!
+    @brief
+        Funkcja do ladnego wyswietlania (w formie tablicy 2D) bitow w poszczegolnych bajtach
+    @param d
+        Wskaznik do bufora danych
+    @param n_bytes
+        Liczba bajtow w buforze danych
+*/
 void print_blk(uchar* d, uchar n_bytes){
     for(uchar i=0x0; i<n_bytes; i++){
         printb(d+i, 8);
@@ -42,6 +66,8 @@ void print_blk(uchar* d, uchar n_bytes){
     }
 }
 //void initial_perm(uchar* blk, uchar* p)
+
+
 uchar test_initial_perm(){
     uchar* d = new uchar[8];
     *d     =  0b10110111;  //11011110
@@ -106,6 +132,7 @@ uchar test_final_perm(){
 */
 //oid e_selection(uchar* blk, uchar* s)
 uchar test_e_selection(){
+    /* Test 1 */
     uchar* d = new uchar[4];
     *d     =  0b11011110;
     *(d+1) =  0b01111011;
@@ -115,18 +142,52 @@ uchar test_e_selection(){
     uchar* s = new uchar[6];
     e_selection(d, s);
     delete[] d;
-    uchar retval =    *s  == 0b11101111 &&
+    uchar retval = 0x1;
+    if(!(             *s  == 0b11101111 &&
                    *(s+1) == 0b11000011 &&
                    *(s+2) == 0b11110110 &&
                    *(s+3) == 0b10111111 &&
                    *(s+4) == 0b10111110 &&
-                   *(s+5) == 0b11111111 ;
+                   *(s+5) == 0b11111111 )) retval = 0x0;
     delete[] s;
+
+    /* Test 2 */
+
+    /*
+        32  1  2  3  4  5  4  5                 1  2  3  4  5  6  7  8
+         6  7  8  9  8  9 10 11                 9 10 11 12 13 14 15 16
+        12 13 12 13 14 15 16 17                17 18 19 20 21 22 23 24
+        16 17 18 19 20 21 20 21                25 26 27 28 29 30 31 32
+        22 23 24 25 24 25 26 27
+        28 29 28 29 30 31 32 1
+    */
+
+    d = new uchar[4];
+    *d     = 0b00011111;
+    *(d+1) = 0b11011100;
+    *(d+2) = 0b01010001;
+    *(d+3) = 0b11100001;
+
+    s = new uchar[6];
+    e_selection(d, s);
+    delete[] d;
+
+    if(!(             *s  == 0b10001111 &&
+                   *(s+1) == 0b11111110 &&
+                   *(s+2) == 0b11111000 &&
+                   *(s+3) == 0b00101010 &&
+                   *(s+4) == 0b00111111 &&
+                   *(s+5) == 0b00000010 )) retval = 0x0;
+
+
+    delete[] s;
+
     return retval;
 }
 
 //void sbox_combined(uchar* u, uchar* v)
 uchar test_sbox_combined(){
+    /* Test 1 */
     uchar* u = new uchar[6];
        *u  = 0b11101111;  // 111011
     *(u+1) = 0b11000011;  // 111100
@@ -142,12 +203,37 @@ uchar test_sbox_combined(){
     sbox_combined(u, v);
     delete[] u;
 
-    uchar retval =    *v  == 0b11100000 &&
-                   *(v+1) == 0b10001101 &&
-                   *(v+2) == 0b11100111 &&
-                   *(v+3) == 0b11111011 ;
+    uchar retval = 0x1;
+    if(!(*v  == 0b11100000 &&
+      *(v+1) == 0b10001101 &&
+      *(v+2) == 0b11100111 &&
+      *(v+3) == 0b11111011)) retval = 0x0;
 
     delete[] v;
+
+    /* Test 2 */
+    u = new uchar[6]; // aka result of before s-box XOR operation in Feistel function
+
+
+    *u     = 0b01111110;     // 01 1111 S1 => 1000
+    *(u+1) = 0b11100010;     // 10 1110 S2 => 0010
+    *(u+2) = 0b10000001;     // 00 1010 S3 => 1100
+    *(u+3) = 0b00101011;     // 00 0001 S4 => 1101
+    *(u+4) = 0b11000111;     // 00 1010 S5 => 0011
+    *(u+5) = 0b01010000;     // 11 1100 S6 => 0110
+                             // 01 1101 S7 => 1111
+                             // 01 0000 S8 => 0001
+
+    v = new uchar[4];
+    sbox_combined(u, v);
+    delete[] u;
+
+    if(!(*v  == 0b10000010 &&
+      *(v+1) == 0b11001101 &&
+      *(v+2) == 0b00110110 &&
+      *(v+3) == 0b11110001)) retval = 0x0;
+    delete[] v;
+
     return retval;
 
 }
@@ -162,6 +248,7 @@ uchar test_sbox_combined(){
 */
 
 uchar test_p_permutation(){
+    /* Test 1 */
     uchar* d = new uchar[4];
     *d     =  0b11011110;
     *(d+1) =  0b01111011;
@@ -171,11 +258,39 @@ uchar test_p_permutation(){
     p_permutation(d, p);
     delete[] d;
     //print_blk(p, 4);
-    uchar retval =    *p  == 0b11111110 &&
-                   *(p+1) == 0b11011111 &&
-                   *(p+2) == 0b10101000 &&
-                   *(p+3) == 0b11111111 ;
+    uchar retval = 0x1;
+
+    if(!(*p  == 0b11111110 &&
+      *(p+1) == 0b11011111 &&
+      *(p+2) == 0b10101000 &&
+      *(p+3) == 0b11111111)) retval = 0x0;
     delete[] p;
+
+    /* Test 2 */
+
+    /*
+        16  7 20 21 29 12 28 17           1  2  3  4  5  6  7  8
+         1 15 23 26  5 18 31 10           9 10 11 12 13 14 15 16
+         2  8 24 14 32 27  3  9          17 18 19 20 21 22 23 24
+        19 13 30  6 22 11  4 25          25 26 27 28 29 30 31 32
+    */
+
+    d = new uchar[4];
+    *d     = 0b10000010;
+    *(d+1) = 0b11001101;
+    *(d+2) = 0b00110110;
+    *(d+3) = 0b11110001;
+
+    p = new uchar[4];
+    p_permutation(d, p);
+    delete[] d;
+    if(!(*p  == 0b11100010 &&
+      *(p+1) == 0b10110001 &&
+      *(p+2) == 0b00011101 &&
+      *(p+3) == 0b11001001)) retval = 0x0;
+    delete[] p;
+
+
     return retval;
 }
 
@@ -264,6 +379,7 @@ uchar test_permuted_choice_2(){
 
 //void xor_blks(uchar* a, uchar* b, uchar* r, const uchar& blk_len)
 uchar test_xor_blks(){
+    /* Test 1 */
     uchar* a = new uchar[4];
     uchar* b = new uchar[4];
 
@@ -281,11 +397,46 @@ uchar test_xor_blks(){
     xor_blks(a, b, r, 0x4);
     delete[] a;
     delete[] b;
-    uchar retval =    *r  == 0b10100011 &&
-                   *(r+1) == 0b10011100 &&
-                   *(r+2) == 0b11000011 &&
-                   *(r+3) == 0b00100000 ;
+    uchar retval = 0x1;
+
+    if(!(*r  == 0b10100011 &&
+      *(r+1) == 0b10011100 &&
+      *(r+2) == 0b11000011 &&
+      *(r+3) == 0b00100000)) retval = 0x0;
     delete[] r;
+
+    /* test 2 */
+    a = new uchar[6]; //aka result of E on R
+    b = new uchar[6]; //aka K
+
+    *a     = 0b10001111;
+    *(a+1) = 0b11111110;
+    *(a+2) = 0b11111000;
+    *(a+3) = 0b00101010;
+    *(a+4) = 0b00111111;
+    *(a+5) = 0b00000010;
+
+    *b     = 0b11110001;
+    *(b+1) = 0b00011100;
+    *(b+2) = 0b01111001;
+    *(b+3) = 0b00000001;
+    *(b+4) = 0b11111000;
+    *(b+5) = 0b01010010;
+
+    r = new uchar[6];
+    xor_blks(a, b, r, 0x6);
+    delete[] a;
+    delete[] b;
+
+    if(!(*r  == 0b01111110 &&
+      *(r+1) == 0b11100010 &&
+      *(r+2) == 0b10000001 &&
+      *(r+3) == 0b00101011 &&
+      *(r+4) == 0b11000111 &&
+      *(r+5) == 0b01010000)) retval = 0x0;
+
+    delete[] r;
+
     return retval;
 }
 
@@ -333,6 +484,8 @@ void visual_test_feistel_f(){
     std::cout << std::endl;
     delete[] r;
 }
+
+//uchar test_feistel_f(uchar)
 
 //void encrypt(uchar* blk, uchar* k, uchar* e)
 void visual_test_encrypt(){
