@@ -809,12 +809,12 @@ uchar test_encrypt_decrypt_blk(){
     delete[] sk;
     delete[] k;
     uchar retval = 0x1;
-    print_blk(plain_blk, 0x8);
+    /*print_blk(plain_blk, 0x8);
     std::cout << "++++++++++++++++++++++++" << std::endl;
     print_blk(enciphered_blk, 0x8);
-    std::cout << "++++++++++++++++++++++++" << std::endl;
+    std::cout << "++++++++++++++++++++++++" << std::endl;*/
     delete[] enciphered_blk;
-    print_blk(deciphered_enciphered_blk, 0x8);
+    //print_blk(deciphered_enciphered_blk, 0x8);
     for(uchar i=0x0; i<0x8; i++){
         if(*(plain_blk+i) != *(deciphered_enciphered_blk+i)){
             retval = 0x0;

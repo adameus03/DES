@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <cstring>
 #include "crypto.h"
 
@@ -132,12 +133,103 @@ void get_subkeys(uchar* k, uchar* sk){
     permuted_choice_2(cd, sk_head);
 }
 
-void encrypt(uchar* in_buffer, uchar* out_buffer, const size_t& in_buffer_sz, const size_t& out_blk_count){
+/*!
+    @brief
+        Funkcja szyfrujaca bufor algorytmem DES
+    @param in_buffer
+        Wskaznik na bufor wejsciowy. Bufor powinien byc przygotowany na dopisanie 8B dodatkowych danych.
+    @param out_buffer
+        Wskaznik na bufor wyjsciowy. Obszar pamieci buforu powinien zostac zaalokowany zanim zostanie wywolana ta funkcja.
+    @param key
+        Wskaznik na zawartosc 64-bitowego klucza glownego dla algorytmu DES
+    @param in_buffer_sz
+        Rozmiar danych w buforze in_buffer przeznaczonych do zaszyfrowania i znajdujacych sie na poczatku bufora
+    @param out_blk_count
+        Referencja do zmiennej, w ktorej zapisana bedzie ilosc 64-bitowych blokow wygenerowanego szyfrogramu
+
+*/
+void encrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_buffer_sz, size_t& out_blk_count){
+
+    uchar* sk = new uchar[96];
+    get_subkeys(key, sk);
+
+    out_blk_count = 1+(in_buffer_sz>>3);
+
+    uchar* in_buff_head = in_buffer;
+    uchar* out_buff_head = out_buffer;
+
+    for(size_t i=0; i<out_blk_count; i++){
+        encrypt_blk(in_buff_head, sk, out_buff_head);
+        in_buff_head += 8;
+        out_buff_head += 8;
+    }
+
+    uchar rem = in_buffer_sz  % 8;
+
+    if(!in_buffer_sz) ++out_blk_count;
+
+    for(uchar i=rem; i<0x8; i++){
+        *in_buff_head++ = 0x0;
+    }
+
+    *in_buff_head = rem;
+
+    encrypt_blk(in_buff_head-8, sk, out_buff_head);
 
 }
 
-void decrypt(uchar* in_buffer, uchar* out_buffer, const size_t& in_blk_count, size_t& out_buffer_sz){
+/*!
+    @brief
+        Funkcja deszyfrujaca bufor algorytmem DES
+    @param in_buffer
+        Wskaznik na zaszyfrowany bufor wejsciowy.
+    @param out_buffer
+        Wskaznik na zdeszyfrowany bufor wyjsciowy. Obszar pamieci buforu powinien zostac zaalokowany zanim zostanie wywolana ta funkcja.
+    @param key
+        Wskaznik na zawartosc 64-bitowego klucza glownego dla algorytmu DES
+    @param in_blk_count
+        Ilosc 64-bitowych blokow szyfrogramu zawartego w buforze in_buffer
+    @param out_buffer_sz
+        Referencja do zmiennej, w ktorej zapisana zostanie wykryta liczba bajtow danych zdeszyfrowanych do bufora out_buffer
 
+*/
+void decrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_blk_count, size_t& out_buffer_sz){
+    uchar* sk = new uchar[96];
+    get_subkeys(key, sk);
+
+    uchar* in_buff_head = in_buffer;
+    uchar* out_buff_head = out_buffer;
+
+    for(size_t i=0; i<in_blk_count; i++){
+        decrypt_blk(in_buff_head, sk, out_buff_head);
+        in_buff_head += 8;
+        out_buff_head += 8;
+    }
+
+    uchar rem = *(out_buff_head-1);
+    out_buffer_sz = rem+(in_blk_count<<3);
+
+}
+
+/*!
+    @brief
+        Generate a random odd-parity 64-bit key
+    @param k
+        Wskaznik na 64-bitowy bufor wyjsciowy. Obszar pamieci buforu powinien zostac zaalokowany zanim zostanie wywolana ta funkcja
+
+*/
+void rand_key(uchar* k){
+    uchar* h = k;
+    uchar t;
+    for(uchar i=0x0; i<0x8; i++){
+        *h = rand() % 256;
+        t = *h;
+        t ^= t << 0x1;
+        t ^= t << 0x2;
+        t ^= t << 0x4;
+        if(!t) *h ^= 0x1;
+        h++;
+    }
 }
 
 
