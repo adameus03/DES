@@ -35,9 +35,9 @@ void feistel_f(uchar* r, uchar* k, uchar* f){
         Wskaznik do miejsca w pamieci, gdzie bedzie zapisany 64-bitowy wynik szyfrowania bloku wejsciowego
 */
 void encrypt_blk(uchar* blk, uchar* sk, uchar* e){
-    std::cout << "Szyfrowanie bloku: " << std::endl;
-    print_blk(blk, 8);
-    std::cout << "-----------------------------" << std::endl;
+    //std::cout << "Szyfrowanie bloku: " << std::endl;
+    //print_blk(blk, 8);
+    //std::cout << "-----------------------------" << std::endl;
 
 
     uchar* lr = new uchar[8];
@@ -77,9 +77,9 @@ void encrypt_blk(uchar* blk, uchar* sk, uchar* e){
         Wskaznik do miejsca w pamieci, gdzie bedzie zapisany 64-bitowy wynik deszyfrowania bloku wejsciowego
 */
 void decrypt_blk(uchar* blk, uchar* sk, uchar* d){
-    std::cout << "Deszyfrowanie bloku: " << std::endl;
-    print_blk(blk, 8);
-    std::cout << "-----------------------------" << std::endl;
+    //std::cout << "Deszyfrowanie bloku: " << std::endl;
+    //print_blk(blk, 8);
+    //std::cout << "-----------------------------" << std::endl;
 
 
     uchar* lr = new uchar[8];
@@ -161,10 +161,10 @@ void get_subkeys(uchar* k, uchar* sk){
 
 */
 void encrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_buffer_sz, size_t& out_blk_count){
-    std::cout << "in_buffer_sz: " << in_buffer_sz << std::endl;
-    std::cout << "in_buffer: " << std::endl;
-    print_blk(in_buffer, 8);
-    std::cout << "++++++++++++++++++++++++++++++" << std::endl;
+    //std::cout << "in_buffer_sz: " << in_buffer_sz << std::endl;
+    //std::cout << "in_buffer: " << std::endl;
+    //print_blk(in_buffer, 8);
+    //std::cout << "++++++++++++++++++++++++++++++" << std::endl;
 
     uchar* sk = new uchar[96];
     get_subkeys(key, sk);
@@ -198,10 +198,10 @@ void encrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_b
 
     encrypt_blk(in_buff_head-7, sk, out_buff_head);
 
-    std::cout << "out_blk_count: " << out_blk_count << std::endl;
-    std::cout << "out_buffer: " << std::endl;
-    print_blk(out_buffer, 8);
-    std::cout << "++++++++++++++++++++++++++++++" << std::endl;
+    //std::cout << "out_blk_count: " << out_blk_count << std::endl;
+    //std::cout << "out_buffer: " << std::endl;
+    //print_blk(out_buffer, 8);
+    //std::cout << "++++++++++++++++++++++++++++++" << std::endl;
 
 }
 
