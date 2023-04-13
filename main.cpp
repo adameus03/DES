@@ -41,7 +41,7 @@ int main(int argc, char** argv)
     else if(argc == 6){
         if(strcmp("-r", argv[4])) { usage(*argv); }
         else {
-            unsigned char* k = new unsigned uchar[8];
+            unsigned char* k = new unsigned char[8];
             rand_key(k);
             store_key(argv[5], k);
             if(strcmp("-d", argv[1])){
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 
     }
     else if(argc == 5){
-        unsigned char* k = new unsigned uchar[8];
+        unsigned char* k = new unsigned char[8];
         load_key(argv[4], k);
         if(strcmp("-d", argv[1])){
             file_encrypt(argv[2], argv[3], k);

@@ -30,7 +30,7 @@ void file_encrypt(const char* source_path, const char* destination_path, uchar* 
 
     std::ofstream f_out(destination_path, std::ofstream::trunc|std::ofstream::binary);
     std::filebuf* f_out_pbuf = f_out.rdbuf();
-    f_out_pbuf->sputn((char*)dbuff, blk_count);
+    f_out_pbuf->sputn((char*)dbuff, blk_count<<3);
     f_out.close();
 
     delete[] dbuff;

@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <cstring>
 #include "crypto.h"
+#include "tests.h"
+#include <iostream>
 
 /*!
     @brief
@@ -33,6 +35,11 @@ void feistel_f(uchar* r, uchar* k, uchar* f){
         Wskaznik do miejsca w pamieci, gdzie bedzie zapisany 64-bitowy wynik szyfrowania bloku wejsciowego
 */
 void encrypt_blk(uchar* blk, uchar* sk, uchar* e){
+    std::cout << "Szyfrowanie bloku: " << std::endl;
+    print_blk(blk, 8);
+    std::cout << "-----------------------------" << std::endl;
+
+
     uchar* lr = new uchar[8];
     initial_perm(blk, lr);
     uchar* l = lr; // L = L0
@@ -70,6 +77,11 @@ void encrypt_blk(uchar* blk, uchar* sk, uchar* e){
         Wskaznik do miejsca w pamieci, gdzie bedzie zapisany 64-bitowy wynik deszyfrowania bloku wejsciowego
 */
 void decrypt_blk(uchar* blk, uchar* sk, uchar* d){
+    std::cout << "Deszyfrowanie bloku: " << std::endl;
+    print_blk(blk, 8);
+    std::cout << "-----------------------------" << std::endl;
+
+
     uchar* lr = new uchar[8];
     initial_perm(blk, lr);
     uchar* l = lr;
@@ -149,6 +161,10 @@ void get_subkeys(uchar* k, uchar* sk){
 
 */
 void encrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_buffer_sz, size_t& out_blk_count){
+    std::cout << "in_buffer_sz: " << in_buffer_sz << std::endl;
+    std::cout << "in_buffer: " << std::endl;
+    print_blk(in_buffer, 8);
+    std::cout << "++++++++++++++++++++++++++++++" << std::endl;
 
     uchar* sk = new uchar[96];
     get_subkeys(key, sk);
@@ -158,7 +174,7 @@ void encrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_b
     uchar* in_buff_head = in_buffer;
     uchar* out_buff_head = out_buffer;
 
-    for(size_t i=0; i<out_blk_count; i++){
+    for(size_t i=0; i<out_blk_count-1; i++){
         encrypt_blk(in_buff_head, sk, out_buff_head);
         in_buff_head += 8;
         out_buff_head += 8;
@@ -166,15 +182,26 @@ void encrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_b
 
     uchar rem = in_buffer_sz  % 8;
 
-    if(!in_buffer_sz) ++out_blk_count;
+    if(!in_buffer_sz){
+        ++out_blk_count;
+        encrypt_blk(in_buff_head, sk, out_buff_head);
+        in_buff_head += 8;
+        out_buff_head += 8;
+    }
+    else in_buff_head += rem;
 
-    for(uchar i=rem; i<0x8; i++){
+    for(uchar i=rem; i<0x7; i++){
         *in_buff_head++ = 0x0;
     }
 
     *in_buff_head = rem;
 
-    encrypt_blk(in_buff_head-8, sk, out_buff_head);
+    encrypt_blk(in_buff_head-7, sk, out_buff_head);
+
+    std::cout << "out_blk_count: " << out_blk_count << std::endl;
+    std::cout << "out_buffer: " << std::endl;
+    print_blk(out_buffer, 8);
+    std::cout << "++++++++++++++++++++++++++++++" << std::endl;
 
 }
 
@@ -207,7 +234,7 @@ void decrypt(uchar* in_buffer, uchar* out_buffer, uchar* key, const size_t& in_b
     }
 
     uchar rem = *(out_buff_head-1);
-    out_buffer_sz = rem+(in_blk_count<<3);
+    out_buffer_sz = rem+((in_blk_count-1)<<3);
 
 }
 

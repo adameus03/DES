@@ -11,6 +11,8 @@ typedef unsigned char uchar;
 
 void checker(const uchar& ok, const char* description);
 
+void print_blk(uchar* d, uchar n_bytes);
+
 uchar test_initial_perm();
 
 uchar test_final_perm();

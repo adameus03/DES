@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <cstring>
 #include "crypto.h"
+#include "tests.h"
+#include <iostream>
 
 void feistel_f(uchar* r, uchar* k, uchar* f);
 
