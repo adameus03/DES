@@ -1,5 +1,9 @@
 #include <iostream>
+#include <cstring>
+
 #include "tests.h"
+#include "fio.h"
+#include "des.h"
 
 using namespace std;
 typedef unsigned char uchar;
@@ -23,7 +27,7 @@ void usage(char* argv0){
 
     std::cout << endl;
 
-    std::cout << "Usage: " << argv0 << " <input_file_path> <output_file_path> [key_file_path] [--random] " << std::endl;
+    std::cout << "Usage: " << argv0 << " {-e | -d} <input_file_path> <output_file_path> [key_file_path] [-r <key_store_file>] " << std::endl;
 }
 
 /* Main function */
@@ -32,8 +36,30 @@ int main(int argc, char** argv)
 
     cout << "DES Encrypt/Decrypt program" << endl;
 
-    if(argc == 4){
+    if(argc < 2) usage(*argv);
+    else if(strcmp("-e", argv[1]) && strcmp("-d", argv[1])) usage(*argv);
+    else if(argc == 6){
+        if(strcmp("-r", argv[4])) { usage(*argv); }
+        else {
+            unsigned char* k = new unsigned uchar[8];
+            rand_key(k);
+            store_key(argv[5], k);
+            if(strcmp("-d", argv[1])){
+                file_encrypt(argv[2], argv[3], k);
+            }
+            else file_decrypt(argv[2], argv[3], k);
+            delete[] k;
+        }
 
+    }
+    else if(argc == 5){
+        unsigned char* k = new unsigned uchar[8];
+        load_key(argv[4], k);
+        if(strcmp("-d", argv[1])){
+            file_encrypt(argv[2], argv[3], k);
+        }
+        else file_decrypt(argv[2], argv[3], k);
+        delete[] k;
     }
     else usage(*argv);
 
