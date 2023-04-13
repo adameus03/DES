@@ -1,2 +1,2 @@
 echo @off
-g++ -o des main.cpp crypto.cpp des.cpp fio.cpp tests.cpp
+"C:\\Program Files\CodeBlocks\MinGW\bin\g++.exe" -o des main.cpp crypto.cpp des.cpp fio.cpp tests.cpp
