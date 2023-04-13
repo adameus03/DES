@@ -9,7 +9,7 @@
     @param k
         Wskaznik do 48-bitowego argumentu K funkcji f(R, K)     [patrz dokumentacja DES]
     @param f
-        Wskaznik do miejsca w pamieci, gdzie bedzie zapisany wynik, czyli f(R, K)    [patrz dokumentacja DES]
+        Wskaznik do miejsca w pamieci, gdzie bedzie zapisany 32-bitowy wynik, czyli f(R, K)    [patrz dokumentacja DES]
 */
 void feistel_f(uchar* r, uchar* k, uchar* f){
     uchar* s = new uchar[6];
@@ -75,7 +75,7 @@ void decrypt_blk(uchar* blk, uchar* sk, uchar* d){
     uchar* r = lr+4;
     uchar* f = new uchar[4];
     uchar* x = new uchar[4];
-    uchar* sk_head = sk;
+    uchar* sk_head = sk + 90;
 
     for(uchar i=0x0; i<0xf; i++){
         feistel_f(r, sk_head, f);

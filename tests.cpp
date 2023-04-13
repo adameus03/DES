@@ -803,7 +803,7 @@ uchar test_encrypt_decrypt_blk(){
     get_subkeys(k, sk);
     uchar* plain_blk = (uchar*)"abecadlo";
     uchar* enciphered_blk = new uchar[8];
-    encrypt_blk((uchar*)plain_blk, sk, enciphered_blk);
+    encrypt_blk(plain_blk, sk, enciphered_blk);
     uchar* deciphered_enciphered_blk = new uchar[8];
     decrypt_blk(enciphered_blk, sk, deciphered_enciphered_blk);
     delete[] sk;
